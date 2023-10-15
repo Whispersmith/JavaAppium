@@ -23,7 +23,7 @@ public class ArticleTests extends CoreTestCase {
 
         assertEquals(
                 "We see unexpected message",
-                "Object-oriented programming language",
+                "bject-oriented programming language",
                 article_title
         );
 

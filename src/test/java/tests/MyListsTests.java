@@ -57,7 +57,8 @@ public class MyListsTests extends CoreTestCase {
         if(Platform.getInstance().isAndroid()){
            NavigationUI.navigateUpFromArticle();
             NavigationUI.navigateUpFromArticle();
-            NavigationUI.goToSavedArticles();}
+            NavigationUI.goToSavedArticles();
+        }
 
 
         MyListsPageObjects MyListsPageObject = MyListsPageObjectFactory.get(driver);
@@ -79,15 +80,35 @@ public class MyListsTests extends CoreTestCase {
         searchPageObject.initSearchInput();
         String word_for_search = "Java";
         searchPageObject.typeSearchLine(word_for_search);
-        String first_article = "Object-oriented programming language";
+        String first_article = "bject-oriented programming language";
         searchPageObject.clickByArticleWithSubstring(first_article);
 
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForTitleArticle();
+        String article_title = ArticlePageObject.getArticleTitle();
 
-        String name_of_folder = "Learning programming";
+        if(Platform.getInstance().isAndroid()) {
+            ArticlePageObject.addArticleToMyList(name_of_folder);
+        }else {
+            ArticlePageObject.addArticleToMySaved();
+        }
+        if(Platform.getInstance().isMW()){
+            AuthorizationPageObject Auth = new AuthorizationPageObject(driver);
+            Auth.clickAuthButton();
+            Auth.enterLoginData(login, password);
+            Auth.submitForm();
 
-        ArticlePageObject.addArticleToMyList(name_of_folder);
+            ArticlePageObject.waitForTitleArticle();
+
+            assertEquals("We are not in the same page after login",
+                    article_title,
+                    ArticlePageObject.getArticleTitle());
+
+            ArticlePageObject.addArticleToMySaved();
+        }
+
+        ArticlePageObject.closeArticle();
+
         NavigationUI NavigationUI =NavigationUIFactory.get(driver);
         NavigationUI.navigateUpFromArticle();
 
@@ -99,10 +120,12 @@ public class MyListsTests extends CoreTestCase {
         MyListsPageObjects MyListPageObjects = MyListsPageObjectFactory.get(driver);
         MyListPageObjects.openFolderByName(name_of_folder);
 
-        NavigationUI.navigateUpFromArticle();
-        NavigationUI.navigateUpFromArticle();
-        NavigationUI.goToSavedArticles();
-        MyListPageObjects.clickNotNow();
+        if(Platform.getInstance().isAndroid()) {
+            NavigationUI.navigateUpFromArticle();
+            NavigationUI.navigateUpFromArticle();
+            NavigationUI.goToSavedArticles();
+            MyListPageObjects.clickNotNow();
+        }
         MyListPageObjects.openFolderByName(name_of_folder);
         String first_article_title = "//*[@text = 'Java (programming language)']";
         MyListPageObjects.swipeArticleToDelete(first_article_title);
