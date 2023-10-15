@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import lib.Platform;
 import lib.ui.Android.AndroidNavigationUI;
 import lib.ui.NavigationUI;
+import lib.ui.mobile_web.MWNavigationUI;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class NavigationUIFactory {
@@ -11,7 +12,7 @@ public class NavigationUIFactory {
         if (Platform.getInstance().isAndroid()){
             return new AndroidNavigationUI(driver);
         }else{
-            throw new RuntimeException("Has no platform " + Platform.getInstance());
+            return new MWNavigationUI(driver);
         }
     }
 }

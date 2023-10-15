@@ -1,10 +1,8 @@
 package tests;
 
 import lib.CoreTestCase;
-import lib.ui.ArticlePageObject;
-import lib.ui.MyListsPageObjects;
-import lib.ui.NavigationUI;
-import lib.ui.SearchPageObject;
+import lib.Platform;
+import lib.ui.*;
 import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.MyListsPageObjectFactory;
 import lib.ui.factories.NavigationUIFactory;
@@ -13,6 +11,10 @@ import org.junit.Test;
 
 
 public class MyListsTests extends CoreTestCase {
+    private static final String name_of_folder = "Learning programming";
+    private static final String
+            login = "Whsppr",
+            password = "Whsppr1234";
     @Test
     public void testSaveFirstArticleToMyList(){
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
@@ -20,23 +22,49 @@ public class MyListsTests extends CoreTestCase {
         searchPageObject.setSearchSkipButton();
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
-        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        searchPageObject.clickByArticleWithSubstring("bject-oriented programming language");
 
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForTitleArticle();
         String article_title = ArticlePageObject.getArticleTitle();
-        String name_of_folder = "Learning programming";
 
-        ArticlePageObject.addArticleToMyList(name_of_folder);
+
+        if(Platform.getInstance().isAndroid()) {
+            ArticlePageObject.addArticleToMyList(name_of_folder);
+        }else {
+            ArticlePageObject.addArticleToMySaved();
+        }
+        if(Platform.getInstance().isMW()){
+            AuthorizationPageObject Auth = new AuthorizationPageObject(driver);
+            Auth.clickAuthButton();
+            Auth.enterLoginData(login, password);
+            Auth.submitForm();
+
+            ArticlePageObject.waitForTitleArticle();
+
+            assertEquals("We are not in the same page after login",
+                    article_title,
+                    ArticlePageObject.getArticleTitle());
+
+            ArticlePageObject.addArticleToMySaved();
+        }
+
+        ArticlePageObject.closeArticle();
+
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
-        NavigationUI.navigateUpFromArticle();
-        NavigationUI.navigateUpFromArticle();
-        NavigationUI.goToSavedArticles();
+        NavigationUI.openNavigation();
+        NavigationUI.clickToMyLists();
+        if(Platform.getInstance().isAndroid()){
+           NavigationUI.navigateUpFromArticle();
+            NavigationUI.navigateUpFromArticle();
+            NavigationUI.goToSavedArticles();}
 
 
         MyListsPageObjects MyListsPageObject = MyListsPageObjectFactory.get(driver);
-        MyListsPageObject.clickNotNow();
-        MyListsPageObject.openFolderByName(name_of_folder);
+        if(Platform.getInstance().isAndroid()){
+            MyListsPageObject.clickNotNow();
+            MyListsPageObject.openFolderByName(name_of_folder);
+        }
         //hardcode потому что локатор неправильный и текста там не будет для заголовка
         MyListsPageObject.swipeArticleToDelete("Java (programming language)");
 

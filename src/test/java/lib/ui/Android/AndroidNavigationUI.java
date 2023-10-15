@@ -7,8 +7,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 public class AndroidNavigationUI extends NavigationUI {
 
     static {
-        NAVIGATE_UP_BUTTON = "//android.widget.ImageButton[@content-desc= 'Navigate up']";
-                SAVED_ARTICLES = "//android.widget.FrameLayout[@content-desc= 'Saved']";
+        NAVIGATE_UP_BUTTON = "xpath://android.widget.ImageButton[@content-desc= 'Navigate up']";
+                SAVED_ARTICLES = "xpath://android.widget.FrameLayout[@content-desc= 'Saved']";
     }
     public AndroidNavigationUI(RemoteWebDriver driver){
         super(driver);
