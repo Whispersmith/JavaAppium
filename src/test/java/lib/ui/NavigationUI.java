@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -17,6 +18,7 @@ abstract public class NavigationUI extends MainPageObject{
     public NavigationUI(RemoteWebDriver driver){
         super(driver);
     }
+    @Step("Click to the Back button for navigate to main screen(this method does nothing for Mobile Web)")
     public void navigateUpFromArticle(){
         this.waitForElementAndClick(
                 NAVIGATE_UP_BUTTON,
@@ -25,6 +27,7 @@ abstract public class NavigationUI extends MainPageObject{
         );
     }
 
+    @Step("Go to Saved articles(this method does nothing for Mobile Web)")
     public void goToSavedArticles(){
         this.waitForElementAndClick(
                 SAVED_ARTICLES,
@@ -32,6 +35,7 @@ abstract public class NavigationUI extends MainPageObject{
                 5
         );
     }
+    @Step("Open navigation menu(this method does nothing for android)")
     public void openNavigation(){
         if(Platform.getInstance().isMW()){
             waitForElementAndClick(OPEN_NAVIGATION, "Cannot find menu navigation",5);
@@ -41,6 +45,7 @@ abstract public class NavigationUI extends MainPageObject{
         }
     }
 
+    @Step("Click button to navigate to list of saved articles(this method does nothing for android)")
     public void clickToMyLists(){
         if(Platform.getInstance().isMW()){
             this.tryToClickElementWithFewAttempts(

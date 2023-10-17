@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -22,11 +23,14 @@ abstract public class ArticlePageObject extends  MainPageObject{
     public ArticlePageObject(RemoteWebDriver driver){
             super(driver);
         }
+    @Step("Waiting for title on the article page")
     public WebElement waitForTitleArticle(){
         return this.waitForElementPresent(String.valueOf(By.id(TITLE)), "Cannot find title", 5);
     }
+    @Step("Get article title")
     public String getArticleTitle(){
         WebElement title_element = waitForTitleArticle();
+        screenshot(this.takeScreenshot("article_title"));
         if(Platform.getInstance().isAndroid()){
             return title_element.getAttribute("text");}
         else {
@@ -34,6 +38,7 @@ abstract public class ArticlePageObject extends  MainPageObject{
         }
 
     }
+    @Step("Swiping article to the footer")
     public void swipeToFooter() {
         if (Platform.getInstance().isAndroid()) {
             this.swipeUpToFindElement(FOOTER_ELEMENT, "Cannot find the end of article", 5);
@@ -44,6 +49,7 @@ abstract public class ArticlePageObject extends  MainPageObject{
                     40
             );
     }
+    @Step("Adding article to the my list ")
     public void addArticleToMyList(String name_of_folder) {
         this.waitForElementAndClick(
                 SAVE_BUTTON,
@@ -68,6 +74,7 @@ abstract public class ArticlePageObject extends  MainPageObject{
         );
     }
 
+    @Step("Adding another article to my list")
     public void addArticleToMyOldList() {
         this.waitForElementAndClick(
                 SAVE_BUTTON,
@@ -81,6 +88,7 @@ abstract public class ArticlePageObject extends  MainPageObject{
         );
     }
 
+    @Step("Adding article to my saved")
     public void addArticleToMySaved(){
         if(Platform.getInstance().isMW()){
             this.removeArticleFromSavedIfItAdded();
@@ -90,6 +98,7 @@ abstract public class ArticlePageObject extends  MainPageObject{
                 "Cannot find options to add article to reading list",
                 5);
     }
+    @Step("Closing article")
     public void closeArticle(){
         if(Platform.getInstance().isAndroid()){
             this.waitForElementAndClick(
@@ -101,6 +110,7 @@ abstract public class ArticlePageObject extends  MainPageObject{
         }
     }
 
+    @Step("Removing article from my saved list if it has been added")
     public void removeArticleFromSavedIfItAdded(){
         if(this.isElementPresent(OPTIONS_REMOVE_FROM_MY_LIST_BUTTON)){
             this.waitForElementAndClick(

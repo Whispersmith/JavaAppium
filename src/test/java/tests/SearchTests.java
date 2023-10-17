@@ -1,36 +1,24 @@
 package tests;
 
 
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.SearchPageObjectFactory;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class SearchTests extends CoreTestCase {
     @Test
+    @Features(value = {@Feature(value = "Search"),@Feature(value = "Article")})
+    @DisplayName("Check the Search ")
+    @Description("Enter 'Java' to the search line and find article 'bject-oriented programming language'")
+    @Step("Starting test testSearch")
+    @Severity(value = SeverityLevel.BLOCKER)
 //находим поле поиска, вводим там Java, смотрим выдачу поиска и ищем там Object-oriented programming language
     public void testSearch(){
-
-
-
-     /*   MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot find input",
-                5
-        );
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Java",
-                "Cannot find Element Search",
-                5
-        );
-
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[@resource-id = 'org.wikipedia:id/search_results_display']//*[@text = 'Object-oriented programming language']"),
-                "Cannot find Object-oriented programming language in list",
-                15
-        );*/
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         if(Platform.getInstance().isAndroid()){
@@ -41,6 +29,11 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
+    @Features(value = {@Feature(value = "Search"),@Feature(value = "Article")})
+    @DisplayName("Check the cancel results of Search")
+    @Description("Type 'Java' to the search line and cancel the search")
+    @Step("Starting test testCancelSearch")
+    @Severity(value = SeverityLevel.BLOCKER)
 //ищем поле ввода, пишем Java, очищаем ввод и проверяем что крестика нет на экране(что поиск закрыт)
     public void testCancelSearch(){
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
@@ -59,6 +52,11 @@ public class SearchTests extends CoreTestCase {
 
 
     @Test
+    @Feature(value = "Search")
+    @DisplayName("Check the amount results of search")
+    @Description("Type '{search_line}' to the search line and count results of search")
+    @Step("Starting test testAmountOfNotEmptySearch")
+    @Severity(value = SeverityLevel.MINOR)
     public void testAmountOfNotEmptySearch(){
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
@@ -69,13 +67,18 @@ public class SearchTests extends CoreTestCase {
         searchPageObject.typeSearchLine(search_line);
         int amount_of_search_results = searchPageObject.getAmountOfFoundArticles();
 
-        assertTrue(
+        Assert.assertTrue(
                 "We found too few results",
                 amount_of_search_results > 0
         );
     }
 
     @Test
+    @Feature(value = "Search")
+    @DisplayName("Check empty results of search")
+    @Description("Type '{search_line}' to the search line and check empty result of search")
+    @Step("Starting test testAmountOfEmptySearch")
+    @Severity(value = SeverityLevel.MINOR)
     public void testAmountOfEmptySearch() {
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
 
@@ -89,6 +92,11 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
+    @Features(value = {@Feature(value = "Search"),@Feature(value = "Article")})
+    @DisplayName("Check title and description of some results after search")
+    @Description("Type '{search_line}' to the search line and check the title and description of some results after search")
+    @Step("Starting test testCheckTitleAndDescription")
+    @Severity(value = SeverityLevel.BLOCKER)
     public void testCheckTitleAndDescription(){
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
 

@@ -1,5 +1,6 @@
 package lib.ui;
 
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -14,6 +15,7 @@ abstract public class MyListsPageObjects extends MainPageObject{
         super(driver);
     }
 
+    @Step("Click button Not Now(this method does nothing for Mobile Web)")
     public void clickNotNow(){
         this.waitForElementAndClick(
                 NOT_NOW_BUTTON,
@@ -21,10 +23,12 @@ abstract public class MyListsPageObjects extends MainPageObject{
                 5
         );
     }
+
     private static String getFolderByXpath(String name_folder){
         return FOLDER_BY_NAME_TPL.replace("{FOLDER_NAME}", name_folder);
     }
 
+    @Step("Open folder by name")
     public void openFolderByName(String name_folder){
         String folder_name_xpath = getFolderByXpath(name_folder);
         this.waitForElementAndClick(
@@ -33,14 +37,17 @@ abstract public class MyListsPageObjects extends MainPageObject{
                 5
         );
     }
+    @Step("Search article by title(this method does nothing for android)")
     public static String getTitleByXpath(String article_title){
         return ARTICLE_TITLE_TPL.replace("{TITLE}",article_title);
     }
 
+    @Step("Search button to remove article(this method does nothing for android)")
     public static String getRemoveButtonByTitle(String article_title){
         return REMOVE_FROM_SAVE_BUTTON.replace("{TITLE}",article_title);
     }
 
+    @Step("Wait article is appear")
     public void waitForArticleAppear(String article_title){
         String article_xpath = getTitleByXpath(article_title);
         this.waitForElementPresent(
@@ -48,6 +55,7 @@ abstract public class MyListsPageObjects extends MainPageObject{
                 "Cannot find article " + article_xpath,
                 5);
     }
+    @Step("Wait article is dissapear")
     public void waitForArticleDisapear(String article_title){
         String article_xpath = getTitleByXpath(article_title);
         this.waitForElementNotPresent(
@@ -56,6 +64,7 @@ abstract public class MyListsPageObjects extends MainPageObject{
                 5);
     }
 
+    @Step("Swipe article to delete for android or refresh page for mobile web")
     public void swipeArticleToDelete(String article_title){
         String article_xpath = getFolderByXpath(article_title);
         this.waitForArticleAppear(article_title);
